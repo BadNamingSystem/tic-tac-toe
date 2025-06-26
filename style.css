@@ -1,0 +1,146 @@
+/* 
++-----------------------------+
+|        Turn For            |  ← <h3>
+|  +-----+   +-----+         |  ← .turn-box (X and O)
+|  |  X  |   |  O  |         |     with .bg highlight behind
+|  +-----+   +-----+         |
+|     (background moves)     |  ← .bg under active player
++-----------------------------+
+
++----------- Game Grid -----------+
+| +---+ +---+ +---+ |             |
+| | 0 | | 1 | | 2 | |             |
+| +---+ +---+ +---+ |             | ← .main-grid with 9 .box cells
+| | 3 | | 4 | | 5 | |             |
+| +---+ +---+ +---+ |             |
+| | 6 | | 7 | | 8 | |             |
+| +---+ +---+ +---+ |             |
++-------------------------------+
+
+[           Results Here         ] ← #results (e.g., “X Wins!”)
+
+[      Play Again Button         ] ← #play-again (initially hidden)
+
+*/
+
+* {
+  color: white;
+  font-family: sans-serif;
+  transition: 0.2s ease-in-out;
+  user-select: none;
+}
+
+/* Centering Content Inside Each Box */
+.align {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+body {
+  background-color: #1D1A05;
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  text-align: center;
+  padding-top: 5vh;
+}
+
+/* It's a grid with 2 columns × 2 rows
+position: relative; allows absolutely positioned children (like .bg) 
+to be positioned relative to this container */
+.turn-container {
+  width: 170px;
+  height: 80px;
+  margin: auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  position: relative;
+}
+
+.turn-container h3 {
+  margin: 0;
+  grid-column-start: 1;
+  grid-column-end: 3;
+}
+
+.turn-container .turn-box {
+  border: 3px solid #FFF;
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+
+.turn-container .turn-box:nth-child(even) {
+  border-right: none;
+}
+
+/*  -- The .bg is a sliding colored background highlight that moves under the "X" or "O" turn box 
+to show whose turn it is right now. --
+position: absolute takes the .bg out of the normal flow so it can float behind the turn boxes
+bottom: 0	        Anchors it to the bottom of .turn-container
+left: 0	            Starts aligned under the X box
+width: 85px	        Exactly half of .turn-container width (170px), so it covers one box
+height: 40px	    Covers the bottom half of the turn box
+background-color	The red/pink background bar
+z-index: -1	        Sends it behind the text and box borders */
+.bg {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 85px;
+  height: 40px;
+  background-color: #ff2e63;
+  z-index: -1;
+}
+
+/* -- MAIN GRID / GAME BOARD --
+This turns the .main-grid div into a CSS Grid container.
+It allows child elements (your .box divs) to be positioned in rows and columns.
+Creates 3 equal-width columns and rows.
+1fr means “1 fraction of the available space”.
+repeat(3, 1fr) = 1fr 1fr 1fr
+Each .box will fill 1 cell in this grid, automatically, in document order. */
+.main-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  /* The whole .main-grid is 250×250 pixels. */
+  height: 250px;
+  width: 250px;
+  /* Centers the grid horizontally on the page (auto left and right).
+    Adds 30px margin on top and bottom.
+    Gives the entire grid a black border around its outer edge. */
+  margin: 30px auto;
+  border: 2px solid #FF8966;
+}
+
+/* Styling the Boxes:
+make Xs and Os look big and bold
+gives each box a black border (you get visible grid lines) */
+.box {
+  cursor: pointer;
+  font-size: 2rem;
+  font-weight: 700;
+  border: 2px solid #FF8966;
+}
+
+.box:hover {
+  background-color: #ff2e63;
+}
+
+#play-again {
+  background-color: #ff2e63;
+  padding: 10px 25px;
+  border: none;
+  font-size: 1.2rem;
+  border-radius: 5px;
+  cursor: pointer;
+  display: none;
+}
+
+#play-again:hover {
+  padding: 10px 40px;
+  background-color: #08d9d6;
+  color: #000;
+}
